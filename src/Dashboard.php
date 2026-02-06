@@ -98,7 +98,6 @@ class Dashboard extends LeftAndMain implements PermissionProvider
      * Handles a request for a {@link DashboardPanel} object.
      * Can be a new record or existing
      *
-     * @param  HTTPRequest $r
      * @return HTTPResponse
      * @throws \SilverStripe\Control\HTTPResponse_Exception
      * @throws \SilverStripe\ORM\ValidationException
@@ -141,7 +140,6 @@ class Dashboard extends LeftAndMain implements PermissionProvider
     /**
      * A controller action that handles the reordering of the panels
      *
-     * @param  HTTPRequest $r
      * @return void
      * @throws \SilverStripe\ORM\ValidationException
      */
@@ -152,11 +150,9 @@ class Dashboard extends LeftAndMain implements PermissionProvider
 
         if (!empty($member) && !empty($sort)) {
             foreach ($sort as $index => $id) {
-                if ($panel = DashboardPanel::get()->byID((int) $id)) {
-                    if ($panel->MemberID == $member->ID) {
-                        $panel->SortOrder = $index;
-                        $panel->write();
-                    }
+                if (($panel = DashboardPanel::get()->byID((int) $id)) && $panel->MemberID == $member->ID) {
+                    $panel->SortOrder = $index;
+                    $panel->write();
                 }
             }
         }
@@ -224,8 +220,6 @@ class Dashboard extends LeftAndMain implements PermissionProvider
 
     /**
      * Gets the current user's dashboard configuration
-     *
-     * @return DataList
      */
     public function BasePanels(): DataList
     {
@@ -234,8 +228,6 @@ class Dashboard extends LeftAndMain implements PermissionProvider
 
     /**
      * Gets the current user's dashboard configuration
-     *
-     * @return DataList
      */
     public function getPanels(): DataList
     {
@@ -256,8 +248,6 @@ class Dashboard extends LeftAndMain implements PermissionProvider
     /**
      * Gets all the available panels that can be installed on the dashboard. All subclasses of
      * {@link DashboardPanel} are included
-     *
-     * @return ArrayList
      */
     public function getAvailablePanels(): ArrayList
     {
@@ -284,8 +274,6 @@ class Dashboard extends LeftAndMain implements PermissionProvider
 
     /**
      * A template accessor to check the ADMIN permission
-     *
-     * @return bool
      */
     public function isAdmin(): bool
     {

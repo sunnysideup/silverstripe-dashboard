@@ -106,8 +106,6 @@ class DashboardPanel extends DataObject
     /**
      * Essentially an abstract method. Every panel must have this method defined to provide
      * a title to the panel selection window
-     *
-     * @return string
      */
     public function getLabel(): string
     {
@@ -117,8 +115,6 @@ class DashboardPanel extends DataObject
     /**
      * Essentially an abstract method. Every panel must have this method defined to provide
      * a description to the panel selection window
-     *
-     * @return string
      */
     public function getDescription(): string
     {
@@ -137,8 +133,6 @@ class DashboardPanel extends DataObject
 
     /**
      * A template accessor for the icon of this panel
-     *
-     * @return string
      */
     public function getFontIconClass(): string
     {
@@ -154,8 +148,6 @@ class DashboardPanel extends DataObject
 
     /**
      * Renders the inner contents of the panel. Similar to $Layout in pages.
-     *
-     * @return string
      */
     public function getContent(): string
     {
@@ -177,8 +169,6 @@ class DashboardPanel extends DataObject
 
     /**
      * The link to delete this panel from the dashboard
-     *
-     * @return string
      */
     public function getDeleteLink(): string
     {
@@ -187,8 +177,6 @@ class DashboardPanel extends DataObject
 
     /**
      * The link to create this panel on the dashboard
-     *
-     * @return string
      */
     public function getCreateLink(): string
     {
@@ -202,8 +190,6 @@ class DashboardPanel extends DataObject
 
     /**
      * Template accessor for the $configure_on_create boolean
-     *
-     * @return bool
      */
     public function getShowConfigure(): bool
     {
@@ -218,8 +204,6 @@ class DashboardPanel extends DataObject
     /**
      * Gets the {@link FieldList} object that is used to configure the fields on this panel.
      * Similar to getCMSFields().
-     *
-     * @return FieldList
      */
     public function getConfigurationFields(): FieldList
     {
@@ -246,8 +230,6 @@ class DashboardPanel extends DataObject
 
     /**
      * Gets the primary actions, which may appear in the top of the panel
-     *
-     * @return ArrayList
      */
     public function getPrimaryActions(): ArrayList
     {
@@ -256,8 +238,6 @@ class DashboardPanel extends DataObject
 
     /**
      * Gets the secondary actions, which may appear in the bottom of the panel
-     *
-     * @return ArrayList
      */
     public function getSecondaryActions(): ArrayList
     {
@@ -266,8 +246,6 @@ class DashboardPanel extends DataObject
 
     /**
      * Renders the entire panel. Similar to {@link FormField::FieldHolder()}
-     *
-     * @return string
      */
     public function getPanelHolder(): string
     {
@@ -276,8 +254,6 @@ class DashboardPanel extends DataObject
 
     /**
      * For backward compatibility to the old static $size property.
-     *
-     * @return string
      */
     public function getSize(): string
     {

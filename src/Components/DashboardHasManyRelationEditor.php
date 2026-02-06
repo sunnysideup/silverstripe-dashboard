@@ -91,8 +91,6 @@ class DashboardHasManyRelationEditor extends FormField
 
     /**
      * Gets all of the items in the relation and provides edit/delete links for the table
-     *
-     * @return ArrayList
      */
     public function getItems(): ArrayList
     {
@@ -169,5 +167,6 @@ class DashboardHasManyRelationEditor extends FormField
 
             return new HTTPResponse("OK");
         }
+        return null;
     }
 }

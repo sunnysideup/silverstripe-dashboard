@@ -45,10 +45,8 @@ class DashboardPanelAction extends ViewableData
      */
     public function getUIClass()
     {
-        switch($this->Type) {
-        case "good":
+        if ($this->Type === "good") {
             return "btn-primary";
-
         }
         return "";
     }

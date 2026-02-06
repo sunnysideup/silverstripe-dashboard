@@ -107,8 +107,6 @@ class DashboardChart extends ViewableData
 
     /**
      * Gets a list of x/y pairs for the template
-     *
-     * @return ArrayList
      */
     public function getChartData(): ArrayList
     {

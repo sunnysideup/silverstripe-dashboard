@@ -41,12 +41,7 @@ class DashboardMember extends DataExtension
         if ($owner->HasConfiguredDashboard) {
             return false;
         }
-
-        if ($owner->DashboardPanels()->exists()) {
-            return false;
-        }
-
-        return true;
+        return !$owner->DashboardPanels()->exists();
     }
 
     /**

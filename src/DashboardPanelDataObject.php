@@ -32,9 +32,6 @@ class DashboardPanelDataObject extends DataObject
      */
     private static $label_field = "ID";
 
-    /**
-     * @return FieldList
-     */
     public function getConfigurationFields(): FieldList
     {
         return FieldList::create();
