@@ -3,16 +3,16 @@ Name: dashboarddefaultadmin
 After: cmsdefaultadmin #Override the CMS module's setting (if CMS is installed)
 ---
 # SilverStripe\Admin\AdminRootController:
-#   default_panel: 'Sunnysideup\SilverStripe\Dashboard\Dashboard'
+#   default_panel: 'Sunnysideup\Dashboard\Dashboard'
 
 # Inject custom styles and JS
 SilverStripe\Admin\LeftAndMain:
   extra_requirements_javascript:
-    - 'sunnysideup/dashboard:javascript/jquery.flip.js'
-    - 'sunnysideup/dashboard:javascript/dashboard.js'
-    - 'sunnysideup/dashboard:javascript/thirdparty/google_jsapi_visualization.js'
-    - 'sunnysideup/dashboard:javascript/dashboard-chart.js'
-    - 'sunnysideup/dashboard:javascript/dashboard-button-options.js'
+    - "sunnysideup/dashboard:javascript/jquery.flip.js"
+    - "sunnysideup/dashboard:javascript/dashboard.js"
+    - "sunnysideup/dashboard:javascript/thirdparty/google_jsapi_visualization.js"
+    - "sunnysideup/dashboard:javascript/dashboard-chart.js"
+    - "sunnysideup/dashboard:javascript/dashboard-button-options.js"
   extra_requirements_css:
-    - 'sunnysideup/dashboard:css/dashboard.css'
-    - 'sunnysideup/dashboard:css/dashboard_icon.css'
+    - "sunnysideup/dashboard:css/dashboard.css"
+    - "sunnysideup/dashboard:css/dashboard_icon.css"
