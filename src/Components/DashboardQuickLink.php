@@ -2,9 +2,9 @@
 
 namespace Sunnysideup\Dashboard\Components;
 
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
-use SilverStripe\Forms\CheckboxField;
 use Sunnysideup\Dashboard\DashboardPanelDataObject;
 use Sunnysideup\Dashboard\Panels\DashboardQuickLinksPanel;
 
@@ -21,33 +21,33 @@ class DashboardQuickLink extends DashboardPanelDataObject
     private static $db = [
         'Link' => 'Varchar(255)',
         'Text' => 'Varchar(50)',
-        'NewWindow' => 'Boolean'
+        'NewWindow' => 'Boolean',
     ];
 
     private static $has_one = [
         'Panel' => DashboardQuickLinksPanel::class,
     ];
 
-    private static $label_field = "Text";
+    private static $label_field = 'Text';
 
     public function getConfigurationFields(): FieldList
     {
         $fields = parent::getConfigurationFields();
         $fields->push(
             TextField::create(
-                "Link",
+                'Link',
                 _t(static::class . '.LINK', 'Link (include http://)')
             )
         );
         $fields->push(
             TextField::create(
-                "Text",
+                'Text',
                 _t(static::class . '.LINKTEXT', 'Link text')
             )
         );
         $fields->push(
             CheckboxField::create(
-                "NewWindow",
+                'NewWindow',
                 _t(static::class . '.NEWWINDOW', 'Open link in new window')
             )
         );

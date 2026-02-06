@@ -2,12 +2,12 @@
 
 namespace Sunnysideup\Dashboard\Panels;
 
-use SilverStripe\Forms\Form;
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\FormAction;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Control\RequestHandler;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\Form;
+use SilverStripe\Forms\FormAction;
 use Sunnysideup\Dashboard\Dashboard;
 
 /**
@@ -21,14 +21,14 @@ class DashboardPanelRequest extends RequestHandler
 {
     private static $url_handlers = [
         '$Action!' => '$Action',
-        '' => 'panel'
+        '' => 'panel',
     ];
 
     private static $allowed_actions = [
-        "panel",
-        "delete",
-        "ConfigureForm",
-        "saveConfiguration"
+        'panel',
+        'delete',
+        'ConfigureForm',
+        'saveConfiguration',
     ];
 
     /**
@@ -60,7 +60,7 @@ class DashboardPanelRequest extends RequestHandler
      * @param  null $action Not in use
      * @return string
      */
-    public function getLink($action=null)
+    public function getLink($action = null)
     {
         return $this->dashboard->Link("panel/{$this->panel->ID}");
     }
@@ -76,7 +76,7 @@ class DashboardPanelRequest extends RequestHandler
     {
         $panel = $this->panel;
 
-        if(!$panel->canView()) {
+        if (! $panel->canView()) {
             return $this->httpError(403);
         }
 
@@ -93,12 +93,12 @@ class DashboardPanelRequest extends RequestHandler
     {
         $panel = $this->panel;
 
-        if(!$panel->canDelete()) {
+        if (! $panel->canDelete()) {
             return $this->httpError(403);
         }
 
         $panel->delete();
-        return new HTTPResponse("OK");
+        return new HTTPResponse('OK');
     }
 
     /**
@@ -112,20 +112,20 @@ class DashboardPanelRequest extends RequestHandler
 
         $form = Form::create(
             $this,
-            "ConfigureForm",
+            'ConfigureForm',
             $panel->getConfigurationFields(),
             FieldList::create(
-                FormAction::create("saveConfiguration", _t('Dashboard.SAVE', 'Save'))
+                FormAction::create('saveConfiguration', _t('Dashboard.SAVE', 'Save'))
                     ->setUseButtonTag(true)
                     ->addExtraClass('btn btn-primary'),
-                FormAction::create("cancel", _t('Dashboard.CANCEL', 'Cancel'))
+                FormAction::create('cancel', _t('Dashboard.CANCEL', 'Cancel'))
                     ->setUseButtonTag(true)
                     ->addExtraClass('btn btn-secondary')
             )
         );
         $form->loadDataFrom($this->panel);
-        $form->setHTMLID("Form_ConfigureForm_".$this->panel->ID);
-        $form->addExtraClass("configure-form");
+        $form->setHTMLID('Form_ConfigureForm_' . $this->panel->ID);
+        $form->addExtraClass('configure-form');
         return $form;
     }
 

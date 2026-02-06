@@ -63,12 +63,12 @@ class DashboardChart extends ViewableData
         list($title, $x_label, $y_label, $chartData) = $args;
 
         if ($chartData === null) {
-			$chartData = [];
+            $chartData = [];
         }
 
         self::$instances++;
 
-		return parent::create($title, $x_label, $y_label, $chartData);
+        return parent::create($title, $x_label, $y_label, $chartData);
     }
 
     /**
@@ -85,8 +85,8 @@ class DashboardChart extends ViewableData
         $y_label = null,
         $chartData = []
     ) {
-        if (!is_array($chartData)) {
-            user_error("DashboardChart: \$chartData must be an array", E_USER_ERROR);
+        if (! is_array($chartData)) {
+            user_error('DashboardChart: $chartData must be an array', E_USER_ERROR);
         }
 
         $this->chartData = $chartData;
@@ -102,7 +102,7 @@ class DashboardChart extends ViewableData
      */
     public function getChartID()
     {
-        return "dashboard-chart-".self::$instances;
+        return 'dashboard-chart-' . self::$instances;
     }
 
     /**
@@ -115,9 +115,9 @@ class DashboardChart extends ViewableData
         foreach ($this->chartData as $x => $y) {
             $list->push(
                 ArrayData::create([
-					'XValue' => $x,
-					'YValue' => $y
-				])
+                    'XValue' => $x,
+                    'YValue' => $y,
+                ])
             );
         }
 

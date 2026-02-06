@@ -12,7 +12,6 @@ use SilverStripe\View\ViewableData;
  */
 class DashboardPanelAction extends ViewableData
 {
-
     /**
      * @var string The link for this action button
      */
@@ -45,10 +44,10 @@ class DashboardPanelAction extends ViewableData
      */
     public function getUIClass()
     {
-        if ($this->Type === "good") {
-            return "btn-primary";
+        if ($this->Type === 'good') {
+            return 'btn-primary';
         }
-        return "";
+        return '';
     }
 
     /**

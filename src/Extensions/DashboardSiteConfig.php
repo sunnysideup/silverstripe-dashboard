@@ -15,6 +15,6 @@ use Sunnysideup\Dashboard\Panels\DashboardPanel;
 class DashboardSiteConfig extends DataExtension
 {
     private static $has_many = [
-       'DashboardPanels' => DashboardPanel::class,
+        'DashboardPanels' => DashboardPanel::class,
     ];
 }

@@ -2,21 +2,20 @@
 
 namespace Sunnysideup\Dashboard\Panels;
 
+use SilverStripe\Control\Controller;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
+use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\TextField;
 use SilverStripe\Security\Member;
-use SilverStripe\Security\Security;
-use SilverStripe\Control\Controller;
 use SilverStripe\Security\Permission;
+use SilverStripe\Security\Security;
 use SilverStripe\SiteConfig\SiteConfig;
-use SilverStripe\Core\Injector\Injector;
-use Sunnysideup\Dashboard\Dashboard;
-use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use Sunnysideup\Dashboard\Components\DashboardButtonOptionsField;
-use SilverStripe\Core\Config\Config;
+use Sunnysideup\Dashboard\Dashboard;
 
 /**
  * Defines the DashboardPanel dataobject. All dashboard panels must descend from this class.
@@ -29,37 +28,37 @@ class DashboardPanel extends DataObject
     private static $table_name = 'DashboardPanel';
 
     private static $db = [
-        'Title'     => 'Varchar(50)',
+        'Title' => 'Varchar(50)',
         'PanelSize' => "Enum(array('small','normal','large'),'normal')",
-        'SortOrder' => 'Int'
+        'SortOrder' => 'Int',
     ];
 
     private static $has_one = [
-        'Member'    => Member::class,
-        'SiteConfig'=> SiteConfig::class
+        'Member' => Member::class,
+        'SiteConfig' => SiteConfig::class,
     ];
 
     private static $casting = [
-        'Content'       => 'HTMLText',
+        'Content' => 'HTMLText',
         'ShowConfigure' => 'Boolean',
-        'IsConfigured'  => 'Boolean',
-        'PanelHolder'   => 'HTMLText',
-        'Link'          => 'Varchar',
-        'CreateLink'    => 'Varchar',
-        'DeleteLink'    => 'Varchar'
+        'IsConfigured' => 'Boolean',
+        'PanelHolder' => 'HTMLText',
+        'Link' => 'Varchar',
+        'CreateLink' => 'Varchar',
+        'DeleteLink' => 'Varchar',
     ];
 
-    private static $default_sort = "SortOrder ASC";
+    private static $default_sort = 'SortOrder ASC';
 
     /**
      * @var string The size of the dashboard panel. Options: "small", "normal", and "large"
      */
-    private static $size = "normal";
+    private static $size = 'normal';
 
     /**
      * @var string Classname of font icon to use for the current panel
      */
-    private static $font_icon = "dashboard";
+    private static $font_icon = 'dashboard';
 
     /**
      * @var int The "weight" of the dashboard panel when listed in the available panels.
@@ -109,7 +108,7 @@ class DashboardPanel extends DataObject
      */
     public function getLabel(): string
     {
-        return "";
+        return '';
     }
 
     /**
@@ -118,7 +117,7 @@ class DashboardPanel extends DataObject
      */
     public function getDescription(): string
     {
-        return "";
+        return '';
     }
 
     /**
@@ -140,10 +139,10 @@ class DashboardPanel extends DataObject
             ->get(static::class, 'font_icon');
 
         if (empty($icon_class)) {
-            return "";
+            return '';
         }
 
-        return "font-icon-" . $icon_class;
+        return 'font-icon-' . $icon_class;
     }
 
     /**
@@ -172,7 +171,7 @@ class DashboardPanel extends DataObject
      */
     public function getDeleteLink(): string
     {
-        return $this->getLink("delete");
+        return $this->getLink('delete');
     }
 
     /**
@@ -183,8 +182,8 @@ class DashboardPanel extends DataObject
         // TODO: Should the class name be escaped? At least Convert::raw2url()
         // is not suitable because it removes backslashes completely, not escaping them.
         return Controller::join_links(
-            $this->getDashboard()->Link("panel/new"),
-            "?type=" . static::class
+            $this->getDashboard()->Link('panel/new'),
+            '?type=' . static::class
         );
     }
 
@@ -213,16 +212,16 @@ class DashboardPanel extends DataObject
 
         return FieldList::create(
             DashboardButtonOptionsField::create(
-                "PanelSize",
+                'PanelSize',
                 _t(Dashboard::class . '.PANELSIZE', $default_size_title),
                 [
-                'small' => '',
-                'normal' => '',
-                'large' => ''
+                    'small' => '',
+                    'normal' => '',
+                    'large' => '',
                 ]
-            )->setSize("small"),
+            )->setSize('small'),
             TextField::create(
-                "Title",
+                'Title',
                 _t(Dashboard::class . '.TITLE', 'Title')
             )
         );
@@ -275,24 +274,24 @@ class DashboardPanel extends DataObject
 
     public function canCreate($member = null, $context = [])
     {
-        return Permission::check("CMS_ACCESS_DashboardAddPanels");
+        return Permission::check('CMS_ACCESS_DashboardAddPanels');
     }
 
     public function canDelete($member = null)
     {
         $m = $member ? $member : Security::getCurrentUser();
-        return Permission::check("CMS_ACCESS_DashboardDeletePanels") && $this->MemberID == $m->ID;
+        return Permission::check('CMS_ACCESS_DashboardDeletePanels') && $this->MemberID == $m->ID;
     }
 
     public function canEdit($member = null)
     {
         $m = $member ? $member : Security::getCurrentUser();
-        return Permission::check("CMS_ACCESS_DashboardConfigurePanels") && $this->MemberID == $m->ID;
+        return Permission::check('CMS_ACCESS_DashboardConfigurePanels') && $this->MemberID == $m->ID;
     }
 
     public function canView($member = null)
     {
         $m = $member ? $member : Security::getCurrentUser();
-        return Permission::check("CMS_ACCESS_Dashboard") && $this->MemberID == $m->ID;
+        return Permission::check('CMS_ACCESS_Dashboard') && $this->MemberID == $m->ID;
     }
 }

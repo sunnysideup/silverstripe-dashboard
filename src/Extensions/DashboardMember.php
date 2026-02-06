@@ -2,10 +2,10 @@
 
 namespace Sunnysideup\Dashboard\Extensions;
 
-use SilverStripe\ORM\DB;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Security\Member;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DB;
+use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
 use Sunnysideup\Dashboard\Panels\DashboardPanel;
 
@@ -18,7 +18,7 @@ use Sunnysideup\Dashboard\Panels\DashboardPanel;
 class DashboardMember extends DataExtension
 {
     private static $db = [
-       'HasConfiguredDashboard' => 'Boolean'
+        'HasConfiguredDashboard' => 'Boolean',
     ];
 
     private static $has_many = [
@@ -30,7 +30,7 @@ class DashboardMember extends DataExtension
      */
     public function updateCMSFields(FieldList $fields)
     {
-        $fields->removeByName("DashboardPanels");
+        $fields->removeByName('DashboardPanels');
     }
 
     public function needsToConfigureDashboard(): bool
@@ -41,13 +41,11 @@ class DashboardMember extends DataExtension
         if ($owner->HasConfiguredDashboard) {
             return false;
         }
-        return !$owner->DashboardPanels()->exists();
+        return ! $owner->DashboardPanels()->exists();
     }
 
     /**
      * Configure the default dashboard panels for the current user
-     *
-     * @return void
      */
     public function configureDefaultDashboardPanels()
     {
@@ -56,7 +54,7 @@ class DashboardMember extends DataExtension
         $config = SiteConfig::current_site_config();
         $panels = DashboardPanel::get()->filter([
             'MemberID' => 0,
-            'SiteConfigID' => $config->ID
+            'SiteConfigID' => $config->ID,
         ]);
 
         /** @var DashboardPanel $p */

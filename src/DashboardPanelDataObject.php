@@ -2,8 +2,8 @@
 
 namespace Sunnysideup\Dashboard;
 
-use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\ORM\DataObject;
 use Sunnysideup\Dashboard\Panels\DashboardPanel;
 
 /**
@@ -18,19 +18,19 @@ class DashboardPanelDataObject extends DataObject
     private static $table_name = 'DashboardPanelDataObject';
 
     private static $db = [
-        'SortOrder' => 'Int'
+        'SortOrder' => 'Int',
     ];
 
     private static $has_one = [
-        'DashboardPanel' => DashboardPanel::class
+        'DashboardPanel' => DashboardPanel::class,
     ];
 
-    private static $default_sort = "SortOrder ASC";
+    private static $default_sort = 'SortOrder ASC';
 
     /**
-     * @var string Like $summary_fields, but these objects only render one field in list view.
+     * @var string Like, but these objects only render one field in list view.
      */
-    private static $label_field = "ID";
+    private static $label_field = 'ID';
 
     public function getConfigurationFields(): FieldList
     {

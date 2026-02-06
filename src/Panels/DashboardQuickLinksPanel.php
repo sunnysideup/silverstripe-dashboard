@@ -3,9 +3,9 @@
 namespace Sunnysideup\Dashboard\Panels;
 
 use SilverStripe\Forms\FieldList;
-use Sunnysideup\Dashboard\Dashboard;
-use Sunnysideup\Dashboard\Components\DashboardQuickLink;
 use Sunnysideup\Dashboard\Components\DashboardHasManyRelationEditor;
+use Sunnysideup\Dashboard\Components\DashboardQuickLink;
+use Sunnysideup\Dashboard\Dashboard;
 
 /**
  * Defines the "Quick Links" dashboard panel type
@@ -18,11 +18,11 @@ class DashboardQuickLinksPanel extends DashboardPanel
     private static $table_name = 'DashboardQuickLinksPanel';
 
     private static $has_many = [
-        'Links' => DashboardQuickLink::class
+        'Links' => DashboardQuickLink::class,
     ];
 
     private static $defaults = [
-        'PanelSize' => "small"
+        'PanelSize' => 'small',
     ];
 
     private static $font_icon = 'link';
@@ -45,7 +45,7 @@ class DashboardQuickLinksPanel extends DashboardPanel
 
         $fields->push(DashboardHasManyRelationEditor::create(
             $this,
-            "Links",
+            'Links',
             DashboardQuickLink::class
         ));
 

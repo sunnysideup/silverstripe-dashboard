@@ -2,18 +2,18 @@
 
 namespace Sunnysideup\Dashboard\Components;
 
-use SilverStripe\Forms\Form;
-use SilverStripe\ORM\DataList;
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\FormAction;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Control\RequestHandler;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\Form;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\ORM\DataList;
 use Sunnysideup\Dashboard\Dashboard;
-use Sunnysideup\Dashboard\Panels\DashboardPanel;
 use Sunnysideup\Dashboard\DashboardPanelDataObject;
+use Sunnysideup\Dashboard\Panels\DashboardPanel;
 
 /**
  * Defines the {@link RequestHandler} object that handles an item belonging to the editor
@@ -24,9 +24,9 @@ use Sunnysideup\Dashboard\DashboardPanelDataObject;
 class DashboardHasManyRelationEditorItemRequest extends RequestHandler
 {
     private static $allowed_actions = [
-        "edit",
-        "delete",
-        "DetailForm"
+        'edit',
+        'delete',
+        'DetailForm',
     ];
 
     /**
@@ -51,7 +51,7 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
 
     private static $url_handlers = [
         '$Action!' => '$Action',
-        '' => 'edit'
+        '' => 'edit',
     ];
 
     public function __construct($dashboard, $panel, $editor, $item)
@@ -83,7 +83,7 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
     public function delete(HTTPRequest $r)
     {
         $this->item->delete();
-        return new HTTPResponse("OK");
+        return new HTTPResponse('OK');
     }
 
     /**
@@ -93,7 +93,7 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
      */
     public function Link($action = null)
     {
-        return Controller::join_links($this->editor->Link(), "item", $this->item->ID ? $this->item->ID : "new", $action);
+        return Controller::join_links($this->editor->Link(), 'item', $this->item->ID ? $this->item->ID : 'new', $action);
     }
 
     /**
@@ -103,7 +103,7 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
      */
     public function RefreshLink()
     {
-        return $this->Link("edit");
+        return $this->Link('edit');
     }
 
     /**
@@ -115,7 +115,7 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
     {
         $form = Form::create(
             $this,
-            "DetailForm",
+            'DetailForm',
             Injector::inst()->get($this->editor->relationClass)->getConfigurationFields(),
             FieldList::create(
                 FormAction::create('saveDetail', _t('Dashboard.SAVE', 'Save'))
@@ -126,7 +126,7 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
                     ->addExtraClass('small')
             )
         );
-        $form->setHTMLID("Form_DetailForm_".$this->panel->ID."_".$this->item->ID);
+        $form->setHTMLID('Form_DetailForm_' . $this->panel->ID . '_' . $this->item->ID);
         $form->loadDataFrom($this->item);
         $form->addExtraClass('dashboard-has-many-editor-detail-form-form');
         return $form;
@@ -143,14 +143,14 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
     public function saveDetail($data, $form)
     {
         $item = $this->item;
-        if(!$item->exists()) {
+        if (! $item->exists()) {
             $item->PanelID = $this->panel->ID;
-            $sort = DataList::create($item->ClassName)->max("SortOrder");
-            $item->SortOrder = $sort+1;
+            $sort = DataList::create($item->ClassName)->max('SortOrder');
+            $item->SortOrder = $sort + 1;
             $item->write();
         }
         $form->saveInto($item);
         $item->write();
-        return new HTTPResponse("OK");
+        return new HTTPResponse('OK');
     }
 }
