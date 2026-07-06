@@ -2,6 +2,9 @@
 
 namespace Sunnysideup\Dashboard\Components;
 
+use Override;
+use SilverStripe\Core\Validation\ValidationException;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
@@ -29,37 +32,31 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
         'DetailForm',
     ];
 
-    /**
-     * @var Dashboard The Dashboard controller in the CMS
-     */
-    protected $dashboard;
-
-    /**
-     * @var DashboardPanel The dashboard panel that owns the editor that is running the request
-     */
-    protected $panel;
-
-    /**
-     * @var DashboardHasManyRelationEditor The editor that is running the request
-     */
-    protected $editor;
-
-    /**
-     * @var DashboardPanelDataObject The object that was requested for edit/create/delete
-     */
-    protected $item;
-
     private static $url_handlers = [
         '$Action!' => '$Action',
         '' => 'edit',
     ];
 
-    public function __construct($dashboard, $panel, $editor, $item)
+    /**
+     * @param Dashboard $dashboard
+     * @param DashboardPanel $panel
+     * @param DashboardHasManyRelationEditor $editor
+     * @param DashboardPanelDataObject $item
+     */
+    public function __construct(/**
+     * @var Dashboard The Dashboard controller in the CMS
+     */
+    protected $dashboard, /**
+     * @var DashboardPanel The dashboard panel that owns the editor that is running the request
+     */
+    protected $panel, /**
+     * @var DashboardHasManyRelationEditor The editor that is running the request
+     */
+    protected $editor, /**
+     * @var DashboardPanelDataObject The object that was requested for edit/create/delete
+     */
+    protected $item)
     {
-        $this->dashboard = $dashboard;
-        $this->panel = $panel;
-        $this->editor = $editor;
-        $this->item = $item;
         parent::__construct();
     }
 
@@ -67,7 +64,7 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
      * An action that handles the edit of an object managed by the editor
      *
      * @param  HTTPRequest
-     * @return \SilverStripe\ORM\FieldType\DBHTMLText
+     * @return DBHTMLText
      */
     public function edit(HTTPRequest $r)
     {
@@ -83,7 +80,7 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
     public function delete(HTTPRequest $r)
     {
         $this->item->delete();
-        return new HTTPResponse('OK');
+        return HTTPResponse::create('OK');
     }
 
     /**
@@ -91,9 +88,10 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
      *
      * @return string
      */
+    #[Override]
     public function Link($action = null)
     {
-        return Controller::join_links($this->editor->Link(), 'item', $this->item->ID ? $this->item->ID : 'new', $action);
+        return Controller::join_links($this->editor->Link(), 'item', $this->item->ID ?: 'new', $action);
     }
 
     /**
@@ -138,7 +136,7 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
      * @param  array $data The raw POST data from the form
      * @param  Form  $form The DetailForm object
      * @return HTTPResponse
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws ValidationException
      */
     public function saveDetail($data, $form)
     {
@@ -149,8 +147,9 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
             $item->SortOrder = $sort + 1;
             $item->write();
         }
+
         $form->saveInto($item);
         $item->write();
-        return new HTTPResponse('OK');
+        return HTTPResponse::create('OK');
     }
 }

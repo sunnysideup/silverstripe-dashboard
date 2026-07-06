@@ -2,6 +2,10 @@
 
 namespace Sunnysideup\Dashboard;
 
+use Override;
+use SilverStripe\Core\Validation\ValidationException;
+use SilverStripe\Model\List\ArrayList;
+use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
@@ -9,7 +13,6 @@ use SilverStripe\Control\RequestHandler;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\ClassLoader;
-use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
@@ -35,7 +38,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider
 
     private static $menu_icon_class = 'font-icon-dashboard';
 
-    private static $tree_class = 'DashboardPanel';
+    private static $model_class = 'DashboardPanel';
 
     private static $url_handlers = [
         'panel/$ID' => 'handlePanel',
@@ -55,6 +58,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider
      *
      * @return array
      */
+    #[Override]
     public function providePermissions()
     {
         $title = _t('Dashboard.MENUTITLE', LeftAndMain::menu_title('Dashboard'));
@@ -99,8 +103,8 @@ class Dashboard extends LeftAndMain implements PermissionProvider
      * Can be a new record or existing
      *
      * @return HTTPResponse
-     * @throws \SilverStripe\Control\HTTPResponse_Exception
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws HTTPResponse_Exception
+     * @throws ValidationException
      */
     public function handlePanel(HTTPRequest $r)
     {
@@ -140,7 +144,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider
     /**
      * A controller action that handles the reordering of the panels
      *
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws ValidationException
      */
     public function sort(HTTPRequest $r)
     {
@@ -162,7 +166,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider
      *
      * @param  HTTPRequest The current request
      * @return HTTPResponse
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws ValidationException
      */
     public function setdefault(HTTPRequest $r)
     {
@@ -178,7 +182,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider
             $clone->write();
         }
 
-        return new HTTPResponse(_t(
+        return HTTPResponse::create(_t(
             'Dashboard.SETASDEFAULTSUCCESS',
             'Success! This dashboard configuration has been set as the default for all new members.'
         ));
@@ -189,7 +193,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider
      *
      * @param  HTTPRequest The current request
      * @return HTTPResponse
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws ValidationException
      */
     public function applytoall(HTTPRequest $r)
     {
@@ -211,7 +215,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider
             }
         }
 
-        return new HTTPResponse(_t(
+        return HTTPResponse::create(_t(
             'Dashboard.APPLYTOALLSUCCESS',
             'Success! This dashboard configuration has been applied to all members who have dashboard access.'
         ));
@@ -268,7 +272,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider
             }
         }
 
-        return $set->sort('Priority');
+        return $set->sort(['Priority' => 'ASC']);
     }
 
     /**
@@ -284,6 +288,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider
      *
      * @return bool
      */
+    #[Override]
     public function canView($member = null)
     {
         return Permission::check('CMS_ACCESS_Dashboard');

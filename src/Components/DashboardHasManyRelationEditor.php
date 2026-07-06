@@ -2,15 +2,18 @@
 
 namespace Sunnysideup\Dashboard\Components;
 
+use SilverStripe\Core\Validation\ValidationException;
+use SilverStripe\Model\List\ArrayList;
+use SilverStripe\Model\ArrayData;
+use SilverStripe\Control\HTTPResponse_Exception;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FormField;
-use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
-use SilverStripe\View\ArrayData;
 use Sunnysideup\Dashboard\DashboardPanelDataObject;
 use Sunnysideup\Dashboard\Panels\DashboardPanel;
 
@@ -34,21 +37,6 @@ class DashboardHasManyRelationEditor extends FormField
     ];
 
     /**
-     * @var DashboardPanel The {@link DashboardPanel} that owns this editor
-     */
-    protected $controller;
-
-    /**
-     * @var string The name of the relationship that is managed by this editor
-     */
-    protected $relationName;
-
-    /**
-     * @var string The class of the related object
-     */
-    protected $relationClass;
-
-    /**
      * @var DataList The current list of records in the relation
      */
     protected $records;
@@ -60,16 +48,25 @@ class DashboardHasManyRelationEditor extends FormField
      * @param string The name of the relation managed by the editor
      * @param string The class of the related object managed by the editor
      * @param string The title (label) of the editor
+     * @param DashboardPanel $controller
+     * @param string $relationName
+     * @param string $relationClass
      */
     public function __construct(
-        $controller,
-        $relationName,
-        $relationClass,
+        /**
+         * @var DashboardPanel The {@link DashboardPanel} that owns this editor
+         */
+        protected $controller,
+        /**
+         * @var string The name of the relationship that is managed by this editor
+         */
+        protected $relationName,
+        /**
+         * @var string The class of the related object
+         */
+        protected $relationClass,
         $title = null
     ) {
-        $this->controller = $controller;
-        $this->relationName = $relationName;
-        $this->relationClass = $relationClass;
         $this->title = $title;
 
         if (! $this->controller instanceof DashboardPanel) {
@@ -77,16 +74,16 @@ class DashboardHasManyRelationEditor extends FormField
         }
 
         if (! isset($this->controller->hasMany()[$this->relationName])) {
-            user_error("DashboardHasManyRelationEditor must be passed a valid has_many relation for the panel. $relationName is not in the has_many array.", E_USER_ERROR);
+            user_error(sprintf('DashboardHasManyRelationEditor must be passed a valid has_many relation for the panel. %s is not in the has_many array.', $this->relationName), E_USER_ERROR);
         }
 
-        if (! is_subclass_of($relationClass, DashboardPanelDataObject::class)) {
+        if (! is_subclass_of($this->relationClass, DashboardPanelDataObject::class)) {
             user_error('DashbordHasManyRelationEditor can only manage subclasses of DashboardPanelDataObject', E_USER_ERROR);
         }
 
-        $this->records = $this->controller->$relationName();
+        $this->records = $this->controller->{$this->relationName}();
 
-        parent::__construct($relationName, $title);
+        parent::__construct($this->relationName, $title);
     }
 
     /**
@@ -106,7 +103,7 @@ class DashboardHasManyRelationEditor extends FormField
                         $record->ID,
                         'delete'
                     ),
-                    'EditLink' => $this->Link("item/{$record->ID}"),
+                    'EditLink' => $this->Link('item/' . $record->ID),
                     'ID' => $record->ID,
                 ])
             );
@@ -120,7 +117,7 @@ class DashboardHasManyRelationEditor extends FormField
      *
      * @param  HTTPRequest
      * @return HTTPResponse
-     * @throws \SilverStripe\Control\HTTPResponse_Exception
+     * @throws HTTPResponse_Exception
      */
     public function handleItem(HTTPRequest $r)
     {
@@ -129,10 +126,12 @@ class DashboardHasManyRelationEditor extends FormField
         } else {
             $item = DataList::create($this->relationClass)->byID((int) $r->param('ID'));
         }
+
         if ($item) {
             $handler = DashboardHasManyRelationEditorItemRequest::create($this->controller->getDashboard(), $this->controller, $this, $item);
             return $handler->handleRequest($r);
         }
+
         return $this->httpError(404);
     }
 
@@ -140,7 +139,7 @@ class DashboardHasManyRelationEditor extends FormField
      * A default controller action that renders the editor
      *
      * @param  HTTPRequest
-     * @return \SilverStripe\ORM\FieldType\DBHTMLText
+     * @return DBHTMLText
      */
     public function index(HTTPRequest $r)
     {
@@ -152,7 +151,7 @@ class DashboardHasManyRelationEditor extends FormField
      *
      * @param  HTTPRequest
      * @return HTTPResponse
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws ValidationException
      */
     public function sort(HTTPRequest $r)
     {
@@ -164,8 +163,9 @@ class DashboardHasManyRelationEditor extends FormField
                 }
             }
 
-            return new HTTPResponse('OK');
+            return HTTPResponse::create('OK');
         }
+
         return null;
     }
 }

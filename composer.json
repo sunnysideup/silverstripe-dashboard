@@ -1,48 +1,48 @@
 {
-  "name": "sunnysideup/dashboard",
-  "description": "Adds a customisable dashboard to the SilverStripe CMS (fork of Unclecheese's module)",
-  "type": "vendormodule",
-  "keywords": [
-    "silverstripe",
-    "dashboard",
-    "cms"
-  ],
-  "license": "BSD-3-Clause",
-  "authors": [
-    {
-      "name": "Uncle Cheese",
-      "email": "unclecheese@leftandmain.com"
+    "name": "sunnysideup/dashboard",
+    "description": "Adds a customisable dashboard to the SilverStripe CMS (fork of Unclecheese's module)",
+    "type": "vendormodule",
+    "keywords": [
+        "silverstripe",
+        "dashboard",
+        "cms"
+    ],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Uncle Cheese",
+            "email": "unclecheese@leftandmain.com"
+        },
+        {
+            "name": "Morven Lewis-Everley",
+            "email": "morven@ilateral.co.uk"
+        },
+        {
+            "name": "Sunny Side Up",
+            "email": "nt@sunnysideup.co.nz"
+        }
+    ],
+    "require": {
+        "silverstripe/framework": "^6.0"
     },
-    {
-      "name": "Morven Lewis-Everley",
-      "email": "morven@ilateral.co.uk"
+    "replace": {
+        "silverstripe/dashboard": "*"
     },
-    {
-      "name": "Sunny Side Up",
-      "email": "nt@sunnysideup.co.nz"
-    }
-  ],
-  "require": {
-    "silverstripe/framework": "^4.0 || ^5.0"
-  },
-  "replace": {
-    "silverstripe/dashboard": "*"
-  },
-  "autoload": {
-    "psr-4": {
-      "Sunnysideup\\Dashboard\\": "src/"
-    }
-  },
-  "extra": {
-    "expose": [
-      "css",
-      "images",
-      "javascript"
-    ]
-  },
-  "support": {
-    "issues": "http://github.com/sunnysideup/dashboard/issues"
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+    "autoload": {
+        "psr-4": {
+            "Sunnysideup\\Dashboard\\": "src/"
+        }
+    },
+    "extra": {
+        "expose": [
+            "css",
+            "images",
+            "javascript"
+        ]
+    },
+    "support": {
+        "issues": "http://github.com/sunnysideup/dashboard/issues"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

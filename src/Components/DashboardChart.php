@@ -2,9 +2,11 @@
 
 namespace Sunnysideup\Dashboard\Components;
 
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\View\ArrayData;
-use SilverStripe\View\ViewableData;
+use Override;
+use SilverStripe\Model\ModelData;
+use SilverStripe\Model\List\ArrayList;
+use SilverStripe\Model\ArrayData;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 
 /**
  * An API for creating a Google chart in a dashboard panel
@@ -12,7 +14,7 @@ use SilverStripe\View\ViewableData;
  * @author  Uncle Cheese <unclecheese@leftandmain.com>
  * @package Dashboard
  */
-class DashboardChart extends ViewableData
+class DashboardChart extends ModelData
 {
     /**
      * @var int A count of the instances, used to create a unique ID for the chart
@@ -58,9 +60,10 @@ class DashboardChart extends ViewableData
      * @param  array The chart data, in x/y pairs
      * @return DashboardChart
      */
+    #[Override]
     public static function create(...$args)
     {
-        list($title, $x_label, $y_label, $chartData) = $args;
+        [$title, $x_label, $y_label, $chartData] = $args;
 
         if ($chartData === null) {
             $chartData = [];
@@ -150,9 +153,10 @@ class DashboardChart extends ViewableData
     /**
      * Renders the chart and loads the dependencies
      *
-     * @return \SilverStripe\ORM\FieldType\DBHTMLText
+     * @return DBHTMLText
      */
-    public function forTemplate()
+    #[Override]
+    public function forTemplate(): string
     {
         return $this->renderWith($this->getViewerTemplates());
     }

@@ -2,13 +2,14 @@
 
 namespace Sunnysideup\Dashboard\Panels;
 
+use Override;
+use SilverStripe\Model\List\ArrayList;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\TextField;
-use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
@@ -161,7 +162,7 @@ class DashboardPanel extends DataObject
     public function getLink($action = null)
     {
         return Controller::join_links(
-            $this->getDashboard()->Link("panel/{$this->ID}"),
+            $this->getDashboard()->Link('panel/' . $this->ID),
             $action
         );
     }
@@ -272,26 +273,30 @@ class DashboardPanel extends DataObject
         )->ConfigureForm();
     }
 
+    #[Override]
     public function canCreate($member = null, $context = [])
     {
         return Permission::check('CMS_ACCESS_DashboardAddPanels');
     }
 
+    #[Override]
     public function canDelete($member = null)
     {
-        $m = $member ? $member : Security::getCurrentUser();
+        $m = $member ?: Security::getCurrentUser();
         return Permission::check('CMS_ACCESS_DashboardDeletePanels') && $this->MemberID == $m->ID;
     }
 
+    #[Override]
     public function canEdit($member = null)
     {
-        $m = $member ? $member : Security::getCurrentUser();
+        $m = $member ?: Security::getCurrentUser();
         return Permission::check('CMS_ACCESS_DashboardConfigurePanels') && $this->MemberID == $m->ID;
     }
 
+    #[Override]
     public function canView($member = null)
     {
-        $m = $member ? $member : Security::getCurrentUser();
+        $m = $member ?: Security::getCurrentUser();
         return Permission::check('CMS_ACCESS_Dashboard') && $this->MemberID == $m->ID;
     }
 }

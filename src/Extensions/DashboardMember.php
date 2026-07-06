@@ -2,8 +2,9 @@
 
 namespace Sunnysideup\Dashboard\Extensions;
 
+use SilverStripe\Core\Validation\ValidationException;
+use SilverStripe\Core\Extension;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DB;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
@@ -15,7 +16,7 @@ use Sunnysideup\Dashboard\Panels\DashboardPanel;
  * @package Dashboard
  * @author  Uncle Cheese <unclecheese@leftandmain.com>
  */
-class DashboardMember extends DataExtension
+class DashboardMember extends Extension
 {
     private static $db = [
         'HasConfiguredDashboard' => 'Boolean',
@@ -41,6 +42,7 @@ class DashboardMember extends DataExtension
         if ($owner->HasConfiguredDashboard) {
             return false;
         }
+
         return ! $owner->DashboardPanels()->exists();
     }
 
@@ -65,7 +67,7 @@ class DashboardMember extends DataExtension
             $clone->write();
         }
 
-        DB::query("UPDATE \"Member\" SET \"HasConfiguredDashboard\" = 1 WHERE \"ID\" = {$owner->ID}");
+        DB::query('UPDATE "Member" SET "HasConfiguredDashboard" = 1 WHERE "ID" = ' . $owner->ID);
         $owner->flushCache();
     }
 
@@ -74,7 +76,7 @@ class DashboardMember extends DataExtension
      * make sure this doesn't happen again, if for some reason a user insists on having an empty
      * dashboard.
      *
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws ValidationException
      */
     public function onAfterWrite()
     {
