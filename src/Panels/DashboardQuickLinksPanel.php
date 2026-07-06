@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\Dashboard\Panels;
 
+use Override;
 use SilverStripe\Forms\FieldList;
 use Sunnysideup\Dashboard\Components\DashboardHasManyRelationEditor;
 use Sunnysideup\Dashboard\Components\DashboardQuickLink;
@@ -29,16 +30,19 @@ class DashboardQuickLinksPanel extends DashboardPanel
 
     private static $configure_on_create = true;
 
+    #[Override]
     public function getLabel(): string
     {
         return _t(Dashboard::class . '.QUICKLINKSLABEL', 'Quick Links');
     }
 
+    #[Override]
     public function getDescription(): string
     {
         return _t(Dashboard::class . '.QUICKLINKSDESCRIPTION', 'Allows management of arbitrary links from the dashboard');
     }
 
+    #[Override]
     public function getConfigurationFields(): FieldList
     {
         $fields = parent::getConfigurationFields();

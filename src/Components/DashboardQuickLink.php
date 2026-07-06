@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\Dashboard\Components;
 
+use Override;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
@@ -30,6 +31,7 @@ class DashboardQuickLink extends DashboardPanelDataObject
 
     private static $label_field = 'Text';
 
+    #[Override]
     public function getConfigurationFields(): FieldList
     {
         $fields = parent::getConfigurationFields();

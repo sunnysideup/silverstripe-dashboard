@@ -1,7 +1,8 @@
 ---
 Name: dashboardlegacy
 ---
-SilverStripe\ORM\DatabaseAdmin:
+
+SilverStripe\Dev\DbBuild:
   classname_value_remapping:
     DashboardPanel: 'Sunnysideup\Dashboard\DashboardPanel'
     DashboardPanelDataObject: 'Sunnysideup\Dashboard\DashboardPanelDataObject'

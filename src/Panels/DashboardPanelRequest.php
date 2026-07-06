@@ -2,6 +2,10 @@
 
 namespace Sunnysideup\Dashboard\Panels;
 
+use Override;
+use SilverStripe\Core\Validation\ValidationException;
+use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Control\RequestHandler;
@@ -48,6 +52,7 @@ class DashboardPanelRequest extends RequestHandler
         parent::__construct();
     }
 
+    #[Override]
     public function Link($action = null)
     {
         return $this->getLink($action);
@@ -62,15 +67,15 @@ class DashboardPanelRequest extends RequestHandler
      */
     public function getLink($action = null)
     {
-        return $this->dashboard->Link("panel/{$this->panel->ID}");
+        return $this->dashboard->Link('panel/' . $this->panel->ID);
     }
 
     /**
      * Renders the panel in this request
      *
      * @param  HTTPRequest
-     * @return \SilverStripe\ORM\FieldType\DBHTMLText
-     * @throws \SilverStripe\Control\HTTPResponse_Exception
+     * @return DBHTMLText
+     * @throws HTTPResponse_Exception
      */
     public function panel(HTTPRequest $r)
     {
@@ -98,7 +103,7 @@ class DashboardPanelRequest extends RequestHandler
         }
 
         $panel->delete();
-        return new HTTPResponse('OK');
+        return HTTPResponse::create('OK');
     }
 
     /**
@@ -135,7 +140,7 @@ class DashboardPanelRequest extends RequestHandler
      * @param  array $data The raw POST data from the form
      * @param  Form  $form The ConfigurationForm
      * @return HTTPResponse
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws ValidationException
      */
     public function saveConfiguration($data, $form)
     {

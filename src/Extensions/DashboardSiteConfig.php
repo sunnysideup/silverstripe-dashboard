@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sunnysideup\Dashboard\Extensions;
 
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 use Sunnysideup\Dashboard\Panels\DashboardPanel;
 
 /**
@@ -12,7 +14,7 @@ use Sunnysideup\Dashboard\Panels\DashboardPanel;
  * @package Dashboard
  * @author  Uncle Cheese <unclecheese@leftandmain.com>
  */
-class DashboardSiteConfig extends DataExtension
+class DashboardSiteConfig extends Extension
 {
     private static $has_many = [
         'DashboardPanels' => DashboardPanel::class,
