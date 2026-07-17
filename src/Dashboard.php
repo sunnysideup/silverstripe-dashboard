@@ -12,6 +12,7 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Control\RequestHandler;
+use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\ClassLoader;
 use SilverStripe\Security\PermissionProvider;
@@ -25,6 +26,8 @@ use Sunnysideup\Dashboard\Panels\DashboardPanel;
  */
 class Dashboard extends LeftAndMain implements PermissionProvider
 {
+    public static ?bool $can_view = null;
+
     private static $menu_title = "Dashboard";
 
     private static $url_segment = "dashboard";
@@ -38,16 +41,16 @@ class Dashboard extends LeftAndMain implements PermissionProvider
     private static $tree_class = 'DashboardPanel';
 
     private static $url_handlers = [
-		'panel/$ID' => 'handlePanel',
-		'$Action!' => '$Action',
-		'' => 'index'
+        'panel/$ID' => 'handlePanel',
+        '$Action!' => '$Action',
+        '' => 'index'
     ];
 
     private static $allowed_actions = [
-		"handlePanel",
-		"sort",
-		"setdefault",
-		"applytoall"
+        "handlePanel",
+        "sort",
+        "setdefault",
+        "applytoall"
     ];
 
     /**
@@ -59,38 +62,38 @@ class Dashboard extends LeftAndMain implements PermissionProvider
     {
         $title = _t("Dashboard.MENUTITLE", LeftAndMain::menu_title('Dashboard'));
         return [
-			"CMS_ACCESS_Dashboard" => [
-				'name' => _t('Dashboard.ACCESS', "Access to '{title}' section", ['title' => $title]),
-				'category' => _t('Permission.CMS_ACCESS_CATEGORY', 'CMS Access'),
-				'help' => _t(
-					'Dashboard.ACCESS_HELP',
-					'Allow use of the CMS Dashboard'
-				)
-			],
-			"CMS_ACCESS_DashboardAddPanels" => [
-				'name' => _t('Dashboard.ADDPANELS', "Add dashboard panels"),
-				'category' => _t('Permission.CMS_ACCESS_CATEGORY', 'CMS Access'),
-				'help' => _t(
-					'Dashboard.ACCESS_HELP',
-					'Allow user to add panels to his/her dashboard'
-				)
-			],
-			"CMS_ACCESS_DashboardConfigurePanels" => [
-				'name' => _t('Dashboard.CONFIGUREANELS', "Configure dashboard panels"),
-				'category' => _t('Permission.CMS_ACCESS_CATEGORY', 'CMS Access'),
-				'help' => _t(
-					'Dashboard.ACCESS_HELP',
-					'Allow user to configure his/her dashboard panels'
-				),
-			],
-			"CMS_ACCESS_DashboardDeletePanels" => [
-				'name' => _t('Dashboard.DELETEPANELS', "Remove dashboard panels"),
-				'category' => _t('Permission.CMS_ACCESS_CATEGORY', 'CMS Access'),
-				'help' => _t(
-					'Dashboard.ACCESS_HELP',
-					'Allow user to remove panels from his/her dashboard'
-				)
-			]
+            "CMS_ACCESS_Dashboard" => [
+                'name' => _t('Dashboard.ACCESS', "Access to '{title}' section", ['title' => $title]),
+                'category' => _t('Permission.CMS_ACCESS_CATEGORY', 'CMS Access'),
+                'help' => _t(
+                    'Dashboard.ACCESS_HELP',
+                    'Allow use of the CMS Dashboard'
+                )
+            ],
+            "CMS_ACCESS_DashboardAddPanels" => [
+                'name' => _t('Dashboard.ADDPANELS', "Add dashboard panels"),
+                'category' => _t('Permission.CMS_ACCESS_CATEGORY', 'CMS Access'),
+                'help' => _t(
+                    'Dashboard.ACCESS_HELP',
+                    'Allow user to add panels to his/her dashboard'
+                )
+            ],
+            "CMS_ACCESS_DashboardConfigurePanels" => [
+                'name' => _t('Dashboard.CONFIGUREANELS', "Configure dashboard panels"),
+                'category' => _t('Permission.CMS_ACCESS_CATEGORY', 'CMS Access'),
+                'help' => _t(
+                    'Dashboard.ACCESS_HELP',
+                    'Allow user to configure his/her dashboard panels'
+                ),
+            ],
+            "CMS_ACCESS_DashboardDeletePanels" => [
+                'name' => _t('Dashboard.DELETEPANELS', "Remove dashboard panels"),
+                'category' => _t('Permission.CMS_ACCESS_CATEGORY', 'CMS Access'),
+                'help' => _t(
+                    'Dashboard.ACCESS_HELP',
+                    'Allow user to remove panels from his/her dashboard'
+                )
+            ]
         ];
     }
 
@@ -112,7 +115,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider
             if ($class && class_exists($class) && is_subclass_of($class, DashboardPanel::class)) {
                 /** @var DashboardPanel $panel */
                 $panel = $class::create();
-				$member = Security::getCurrentUser();
+                $member = Security::getCurrentUser();
 
                 if ($panel->canCreate($member)) {
                     $panel->MemberID = $member->ID;
@@ -147,8 +150,8 @@ class Dashboard extends LeftAndMain implements PermissionProvider
      */
     public function sort(HTTPRequest $r)
     {
-		$member = Security::getCurrentUser();
-		$sort = $r->requestVar('dashboard-panel');
+        $member = Security::getCurrentUser();
+        $sort = $r->requestVar('dashboard-panel');
 
         if (!empty($member) && !empty($sort)) {
             foreach ($sort as $index => $id) {
@@ -184,9 +187,9 @@ class Dashboard extends LeftAndMain implements PermissionProvider
         }
 
         return new HTTPResponse(_t(
-			'Dashboard.SETASDEFAULTSUCCESS',
-			'Success! This dashboard configuration has been set as the default for all new members.'
-		));
+            'Dashboard.SETASDEFAULTSUCCESS',
+            'Success! This dashboard configuration has been set as the default for all new members.'
+        ));
     }
 
     /**
@@ -198,12 +201,12 @@ class Dashboard extends LeftAndMain implements PermissionProvider
      */
     public function applytoall(HTTPRequest $r)
     {
-		$curr_member = Security::getCurrentUser();
+        $curr_member = Security::getCurrentUser();
         $members = Permission::get_members_by_permission(["CMS_ACCESS_Dashboard", "ADMIN"]);
 
-		foreach ($members as $member) {
+        foreach ($members as $member) {
             if ($member->ID == $curr_member->ID) {
-				continue;
+                continue;
             }
 
             $member->DashboardPanels()->removeAll();
@@ -217,9 +220,9 @@ class Dashboard extends LeftAndMain implements PermissionProvider
         }
 
         return new HTTPResponse(_t(
-			'Dashboard.APPLYTOALLSUCCESS',
-			'Success! This dashboard configuration has been applied to all members who have dashboard access.'
-		));
+            'Dashboard.APPLYTOALLSUCCESS',
+            'Success! This dashboard configuration has been applied to all members who have dashboard access.'
+        ));
     }
 
     /**
@@ -266,7 +269,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider
             ->getManifest()
             ->getDescendantsOf(DashboardPanel::class);
 
-		if ($this->config()->excluded_panels) {
+        if ($this->config()->excluded_panels) {
             $panels = array_diff($panels, $this->config()->excluded_panels);
         }
 
@@ -274,7 +277,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider
             $SNG = Injector::inst()->get($class);
             $SNG->Priority = Config::inst()->get($class, "priority");
 
-            if($SNG->registered() == true) {
+            if ($SNG->registered() == true) {
                 $set->push($SNG);
             }
         }
@@ -299,7 +302,10 @@ class Dashboard extends LeftAndMain implements PermissionProvider
      */
     public function canView($member = null)
     {
-        return Permission::check("CMS_ACCESS_Dashboard");
+        if ($this->config()->can_view !== null) {
+            return $this->config()->can_view;
+        }
+        return LeftAndMain::canView($member) && Permission::check("CMS_ACCESS_Dashboard");
     }
 
     /**
