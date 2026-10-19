@@ -15,9 +15,10 @@ class DashboardItemEditForm extends Extension
      */
     public function updateItemEditForm($form)
     {
-        $id = $this->owner->request->getVar('ID');
+        $owner = $this->getOwner();
+        $id = $owner->request->getVar('ID');
 
-        if(!empty($id)) {
+        if (!empty($id)) {
             Injector::inst()->get(CMSMain::class)->setCurrentPageID($id);
             $form->Fields()->push(HiddenField::create('ID', '', $id));
         }
