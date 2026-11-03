@@ -159,10 +159,13 @@ class DashboardHasManyRelationEditor extends FormField
      */
     public function sort(HTTPRequest $r)
     {
-        if ($items = $r->getVar('item')) {
+        $items = $r->getVar('item');
+        if ($items && is_array($items)) {
             foreach ($items as $position => $id) {
-                if ($item = DataList::create($this->relationClass)->byID((int) $id)) {
-                    $item->SortOrder = $position;
+                // only records of this relation, and only if the current user can edit them
+                $item = $this->records->byID((int) $id);
+                if ($item && $item->canEdit()) {
+                    $item->SortOrder = (int) $position;
                     $item->write();
                 }
             }

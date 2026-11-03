@@ -6,6 +6,7 @@ use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Security\Security;
+use SilverStripe\Security\SecurityToken;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Security\Permission;
@@ -49,8 +50,8 @@ class Dashboard extends LeftAndMain implements PermissionProvider
     private static $allowed_actions = [
         "handlePanel",
         "sort",
-        "setdefault",
-        "applytoall"
+        "setdefault" => "ADMIN",
+        "applytoall" => "ADMIN"
     ];
 
     /**
@@ -174,6 +175,11 @@ class Dashboard extends LeftAndMain implements PermissionProvider
      */
     public function setdefault(HTTPRequest $r)
     {
+        // overwrites the dashboard of everyone: needs a valid security token (CSRF)
+        if (!SecurityToken::inst()->checkRequest($r)) {
+            return $this->httpError(400, 'Invalid or missing security token');
+        }
+
         /** @var DashboardPanel $panel */
         foreach (SiteConfig::current_site_config()->DashboardPanels() as $panel) {
             $panel->delete();
@@ -201,6 +207,11 @@ class Dashboard extends LeftAndMain implements PermissionProvider
      */
     public function applytoall(HTTPRequest $r)
     {
+        // overwrites the dashboard of everyone: needs a valid security token (CSRF)
+        if (!SecurityToken::inst()->checkRequest($r)) {
+            return $this->httpError(400, 'Invalid or missing security token');
+        }
+
         $curr_member = Security::getCurrentUser();
         $members = Permission::get_members_by_permission(["CMS_ACCESS_Dashboard", "ADMIN"]);
 
@@ -223,6 +234,22 @@ class Dashboard extends LeftAndMain implements PermissionProvider
             'Dashboard.APPLYTOALLSUCCESS',
             'Success! This dashboard configuration has been applied to all members who have dashboard access.'
         ));
+    }
+
+    /**
+     * Link (including security token) to set the current dashboard as the default one.
+     */
+    public function SetDefaultLink(): string
+    {
+        return SecurityToken::inst()->addToUrl($this->Link('setdefault'));
+    }
+
+    /**
+     * Link (including security token) to apply the current dashboard to all members.
+     */
+    public function ApplyToAllLink(): string
+    {
+        return SecurityToken::inst()->addToUrl($this->Link('applytoall'));
     }
 
     /**

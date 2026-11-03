@@ -15,8 +15,8 @@
 				<span class="ss-fancy-dropdown right">
 					<a class="btn btn-secondary ss-fancy-dropdown-btn" href="javascript:void(0)"><%t Sunnysideup\Dashboard\Dashboard_Content.ADMINISTRATION 'Administration' %></a>
 					<span class="ss-fancy-dropdown-options">
-						<a class="set-as-default dashboard-message-link" href="$Link('setdefault')"><%t Sunnysideup\Dashboard\Dashboard.SETASDEFAULT 'Make this the default dashboard' %></a>
-						<a class="apply-to-all dashboard-message-link" href="$Link('applytoall')"><%t Sunnysideup\Dashboard\Dashboard.APPLYTOALL 'Apply this dashboard to all members' %></a>
+						<a class="set-as-default dashboard-message-link" href="$SetDefaultLink"><%t Sunnysideup\Dashboard\Dashboard.SETASDEFAULT 'Make this the default dashboard' %></a>
+						<a class="apply-to-all dashboard-message-link" href="$ApplyToAllLink"><%t Sunnysideup\Dashboard\Dashboard.APPLYTOALL 'Apply this dashboard to all members' %></a>
 					</span>
 				</span>
 			<% end_if %>
